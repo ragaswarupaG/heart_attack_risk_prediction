@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Heart Attack Risk</title>
+</head>
+
+
+<style>
+    html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+    body {
+        font-family: Arial, sans-serif;
+        color: #16386c;
+    }
+
+
+    #main-form-design {
+
+        background-color: rgba(242, 250, 255, 0.888);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 50%;
+        margin: 0 auto;
+
+    }
+
+    form label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: inline-block;
+    }
+
+    form input,
+    form select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        /* border: 1px solid #ccc; */
+         border: none;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+
+    form .slider {
+        width: 80%;
+    }
+
+    form .slider-value {
+        font-weight: bold;
+        color: #555;
+    }
+
+    button {
+        background: #1a42bb;
+        color: rgb(255, 255, 255);
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+        display: block;
+        margin: 0 auto;
+    }
+
+    button:hover {
+        background: #709be0;
+    }
+
+    p {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 18px;
+       
+    }
+
+    #intro{
+        color: white;
+        padding-left: 250px;
+        padding-right: 250px;
+        text-align: center;
+
+    }
+
+
+.header {
+        padding: 0 20px; 
+        margin: 0;
+        height: 7vh;
+        background: linear-gradient(90deg, #c3dfff, #5FD9C5);       
+    display: flex; 
+        align-items: center; 
+        justify-content: space-between;
+    }
+
+    .header img {
+        height: 13vh; 
+        width: auto; 
+    }
+.hi{
+    text-align: center; color: #ffffff; font-size: 2.5em; font-weight: bold; 
+}
+
+
+.nav-links {
+        list-style: none; 
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 20px;
+    }
+
+    .nav-links li {
+        display: inline-block;
+    }
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.1em;
+        transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+        color: #709be0; 
+    }
+    label{
+        padding-bottom: 10px;
+    }
+
+#risk {
+    color: #000000;
+    font-family: Arial;
+    background-color: rgba(252, 255, 214, 0.906);
+    padding: 14px;
+    border-radius: 15px;
+    margin: 10px auto; 
+    width: fit-content; 
+    max-width: 60%; 
+    text-align: center; 
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.5s ease; 
+}
+
+
+    
+</style>
+
+
+<body style="background-image: url('{{ url_for('static', filename='background.jpg') }}'); 
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;">
+
+<div class="header">
+    <img src="{{ url_for('static', filename='TPlogo.png') }}" alt="tplogo">
+
+    <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contact Us</a></li>
+    </ul>
+</div>
+
+
+<h1 class="hi">
+    Heart Attack Risk Prediction
+</h1>
+
+
+<p id="intro">Welcome to Heart Attack Risk Prediction, your go-to platform for
+     assessing potential heart health risks. By analyzing key health and lifestyle factors, our website lets you know if you are in risk of a heart attack! </p>
+
+    <!-- <div style="text-align: center">
+
+     <p id="risk">{{ attack_prediction }}</p>
+
+    </div> -->
+
+    <div style="text-align: center">
+    <p id="risk" style="{{ 'opacity: 1; visibility: visible;' if attack_prediction else 'opacity: 0; visibility: hidden;' }}">{{ attack_prediction }}</p>
+</div>
+
+    <form action="/predict" method="post">
+
+        <div id="main-form-design">
+            <div id="main-form">
+
+                <div class="slider-container">
+                    <label for="age">Age:</label> <br>
+                    <input type="range" id="age" name="age" min="1" max="100" value="50" class="slider">
+                    <span class="slider-value">50</span>
+                </div>
+
+                <label for="age">Heart Rate (Beats per minute):</label>
+                <input type="number" name="heart_rate" required min="0"><br><br>
+
+
+                <label for="diabetes">Do you have diabetes?</label>
+                <select name="diabetes" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br><br>
+
+
+                <label for="family_history">Any family history with heart attacks?</label>
+                <select name="family_history" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br><br>
+
+                <label for="smoking">Do you smoke?</label>
+                <select name="smoking" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br><br>
+
+                <label for="obesity">Do you have obesity?</label>
+                <select name="obesity" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br><br>
+
+                <label for="alcohol_consumption">Do you consume alcohol?</label>
+                <select name="alcohol_consumption" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br><br>
+
+                <label for="exercise_hours_per_week">Exercise Hours Per Week</label>
+
+                <input type="number" name="exercise_hours_per_week" required min="0"><br><br>
+
+
+                <label for="previous_heart_problems">Are you diagnosed with any heart problems in the past?</label>
+                <select name="previous_heart_problems" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select><br><br>
+
+
+                <label for="stress">Stress level (10 being the highest)</label>
+                <select name="stress" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+
+                </select><br><br>
+
+
+
+                <div class="slider-container">
+                    <label for="sedentary_hours_per_day">Sedentary hours per day:</label> <br>
+                    <input type="range" id="sedentary_hours_per_day" name="sedentary_hours_per_day" min="1" max="24"
+                        value="12" class="slider">
+                    <span class="slider-value-sedentary">12</span>
+                </div>
+
+                <label for="bmi">Whats your BMI?</label>
+                <input type="number" name="bmi" placeholder="BMI" required min="0"><br><br>
+
+
+                <label for="triglycerides">Whats your triglycerides level? (mg/dL)</label>
+                <input type="number" name="triglycerides" placeholder="Triglycerides" required min="0"><br><br>
+
+
+
+
+                <div class="slider-container">
+                    <label for="sleep_hours_per_day">Sleep hours per day:</label> <br>
+                    <input type="range" id="sleep_hours_per_day" name="sleep_hours_per_day" min="1" max="24" value="12"
+                        class="slider">
+                    <span class="slider-value-sleep">12</span>
+                </div>
+
+
+                <label for="systolic">Whats your systolic level (blood pressure)?</label>
+                <input type="number" name="systolic" placeholder="Systolic" required min="0"><br><br>
+
+
+                <label for="Diastolic">Whats your diastolic level (blood pressure)?</label>
+                <input type="number" name="diastolic" placeholder="Diastolic" required min="0"><br><br>
+
+
+                <label for="gender">Gender:</label>
+                <select id="gender" required>
+                    <option disabled selected  value="">Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+
+                <input type="hidden" id="gender_female" name="Sex_Female" value="0">
+
+                <input type="hidden" id="gender_male" name="Sex_Male" value="0">
+
+                <br>
+
+
+                <label for="diet">Select Your Diet Type:</label>
+                <select id="diet" required>
+                    <option disabled selected   value="">Diet type</option>
+                    <option value="average">Average</option>
+                    <option value="healthy">Healthy</option>
+                    <option value="unhealthy">Unhealthy</option>
+                </select>
+
+                <input type="hidden" id="diet_average" name="diet_average" value="0">
+                <input type="hidden" id="diet_healthy" name="diet_healthy" value="0">
+                <input type="hidden" id="diet_unhealthy" name="diet_unhealthy" value="0">
+
+                <br>
+
+
+                <label for="cholesterol">Select your cholesterol level type:</label>
+                <select id="cholesterol" required>
+                    <option disabled selected  value="">Cholesterol Level</option>
+
+                    <option value="normal">Normal Cholesterol Level</option>
+                    <option value="risk">At Risk of High Cholesterol</option>
+                    <option value="high">High Cholesterol</option>
+                    <option value="danger">Dangerous Levels of Cholesterol</option>
+                </select>
+
+                <input type="hidden" id="cholesterol_normal" name="cholesterol_normal" value="0">
+                <input type="hidden" id="cholesterol_risk" name="cholesterol_risk" value="0">
+                <input type="hidden" id="cholesterol_high" name="cholesterol_high" value="0">
+                <input type="hidden" id="cholesterol_dangerous" name="cholesterol_dangerous" value="0">
+
+                <br>
+                <button type="submit">Predict Heart Attack Risk</button>
+    </form>
+   
+
+    </div>
+    </div>
+
+    <script>
+        const ageSlider = document.getElementById('age');
+        const ageValue = document.querySelector('.slider-value');
+
+        ageSlider.addEventListener('input', () => {
+            ageValue.textContent = ageSlider.value;
+        });
+
+
+
+        const sedenataryHours = document.getElementById('sedentary_hours_per_day');
+        const sedenataryHoursValue = document.querySelector('.slider-value-sedentary');
+
+        sedenataryHours.addEventListener('input', () => {
+            sedenataryHoursValue.textContent = sedenataryHours.value;
+        });
+
+        const sleepHours = document.getElementById('sleep_hours_per_day');
+        const sleepHoursValue = document.querySelector('.slider-value-sleep');
+
+        sleepHours.addEventListener('input', () => {
+            sleepHoursValue.textContent = sleepHours.value;
+        });
+
+
+        const dietSelect = document.getElementById('diet');
+        const dietAverage = document.getElementById('diet_average');
+        const dietHealthy = document.getElementById('diet_healthy');
+        const dietUnhealthy = document.getElementById('diet_unhealthy');
+
+        dietSelect.addEventListener('change', () => {
+            dietAverage.value = '0';
+            dietHealthy.value = '0';
+            dietUnhealthy.value = '0';
+
+            if (dietSelect.value === 'average') {
+                dietAverage.value = '1';
+                console.log('Diet Average selected');
+            } else if (dietSelect.value === 'healthy') {
+                dietHealthy.value = '1';
+                console.log('Diet Healthy selected');
+            } else if (dietSelect.value === 'unhealthy') {
+                dietUnhealthy.value = '1';
+                console.log('Diet Unhealthy selected');
+            }
+        });
+
+        const genderSelect = document.getElementById('gender');
+        const genderMale = document.getElementById('gender_male');
+        const genderFemale = document.getElementById('gender_female');
+
+        genderSelect.addEventListener('change', () => {
+            if (genderSelect.value == 'female') {
+                genderFemale.value = '1';
+                genderMale.value = '0';
+                console.log('Gender Female selected');
+                console.log("Female:", genderFemale.value)
+                console.log("Male:", genderMale.value)
+
+            } else if (genderSelect.value == 'male') {
+                genderMale.value = '1';
+                genderFemale.value = '0';
+                console.log('Gender Male selected');
+                console.log("Female:", genderFemale.value)
+                console.log("Male:", genderMale.value)
+            }
+        });
+
+        const cholesterolSelect = document.getElementById('cholesterol');
+        const cholesterolNormal = document.getElementById('cholesterol_normal');
+        const cholesterolRisk = document.getElementById('cholesterol_risk');
+        const cholesterolHigh = document.getElementById('cholesterol_high');
+        const cholesterolDangerous = document.getElementById('cholesterol_dangerous');
+
+        cholesterolSelect.addEventListener('change', () => {
+            cholesterolNormal.value = '0';
+            cholesterolRisk.value = '0';
+            cholesterolHigh.value = '0';
+            cholesterolDangerous.value = '0';
+
+            if (cholesterolSelect.value === 'normal') {
+                cholesterolNormal.value = '1';
+                console.log('Cholesterol Normal selected');
+            } else if (cholesterolSelect.value === 'risk') {
+                cholesterolRisk.value = '1';
+                console.log('Cholesterol Risk selected');
+            } else if (cholesterolSelect.value === 'high') {
+                cholesterolHigh.value = '1';
+                console.log('Cholesterol High selected');
+            } else if (cholesterolSelect.value === 'danger') {
+                cholesterolDangerous.value = '1';
+                console.log('Cholesterol Dangerous selected');
+            }
+        });
+
+        if (document.getElementById('risk').innerText) {
+            document.getElementById('risk').style.visibility = 'visible';
+            document.getElementById('risk').style.opacity = '1';
+        }
+
+
+    </script>
+</body>
+
+</html>
